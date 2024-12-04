@@ -1,0 +1,75 @@
+<!--<databaseChangeLog-->
+<!--        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"-->
+<!--        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">-->
+
+<!--    <changeSet id="create-users-table" author="your_name">-->
+<!--        <createTable tableName="USERS">-->
+<!--            <column name="ID" type="SERIAL">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="VERSION" type="INTEGER">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="EMAIL" type="VARCHAR(255)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="PASSWORD" type="TEXT">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="CREATION_TIMESTAMP" type="TIMESTAMP"/>-->
+<!--            <column name="MODIFICATION_TIMESTAMP" type="TIMESTAMP"/>-->
+<!--            <column name="DEACTIVATED" type="BOOLEAN" defaultValue="false"/>-->
+<!--            <column name="VERIFIED" type="BOOLEAN" defaultValue="false"/>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="create-user-role-table" author="your_name" runOrder="after:create-users-table">-->
+<!--        <createTable tableName="USER_ROLE">-->
+<!--            <column name="ID" type="SERIAL">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="VERSION" type="INTEGER">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="MODIFICATION_TIMESTAMP" type="TIMESTAMP"/>-->
+<!--            <column name="CREATION_TIMESTAMP" type="TIMESTAMP"/>-->
+<!--            <column name="NAME" type="VARCHAR(25)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="FK_USER_ID" type="INTEGER"/>-->
+<!--        </createTable>-->
+<!--        <addForeignKeyConstraint-->
+<!--                baseTableName="USER_ROLE"-->
+<!--                baseColumnNames="FK_USER_ID"-->
+<!--                referencedTableName="USERS"-->
+<!--                referencedColumnNames="ID"-->
+<!--                constraintName="fk_user_role_user"/>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="create-students-table" author="your_name" runOrder="after:create-user-role-table">-->
+<!--        <createTable tableName="STUDENTS">-->
+<!--            <column name="ID" type="SERIAL">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="VERSION" type="INTEGER">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="MODIFICATION_TIMESTAMP" type="TIMESTAMP"/>-->
+<!--            <column name="CREATION_TIMESTAMP" type="TIMESTAMP"/>-->
+<!--            <column name="FIRST_NAME" type="VARCHAR(255)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="LAST_SURNAME" type="VARCHAR(255)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="GENDER" type="VARCHAR(255)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="STUDENT_NUMBER" type="VARCHAR(30)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+<!--</databaseChangeLog>-->

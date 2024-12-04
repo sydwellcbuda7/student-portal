@@ -1,0 +1,64 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+    name: Student Portal API
+  datasource:
+    url: jdbc:mysql://localhost:3306/student_portal # Connect to the MySQL container by service name
+    username: student_user                                # MySQL user
+    password: student_pass                                # MySQL user password
+    driver-class-name: com.mysql.cj.jdbc.Driver           # MySQL JDBC driver
+    hikari:
+      maximum-pool-size: 10
+  # Optional: Configure connection pool size (HikariCP)
+  jpa:
+    hibernate:
+      ddl-auto: update                                    # Automatically update the schema
+    show-sql: true                                        # Log SQL queries
+  mysql:
+    continue-on-error: true
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG                            # Enable logging for SQL queries
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Log SQL parameter binding
+
+  mail:
+    protocol: smtp
+    host: localhost
+    port: 1025
+    properties:
+      mail:
+        transport:
+          protocol: smtps
+        smtp:
+          auth: false
+          starttls:
+            enable: true
+    username:
+    password:
+    default-encoding: utf-8
+    test-connection: true
+
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+    check-template-location: true
+
+#  liquibase:
+#    change-log: classpath:db/changelog/db.changelog-master.xml
+#    enabled: true
+
+student-portal:
+  host: http://localhost:8080
+  jwtSecret: ByCoZ1VLVlASquaddedKt152JBTcC41Tdh
+
+#springdoc:
+#  swagger-ui:
+#    path: /custom-swagger-ui

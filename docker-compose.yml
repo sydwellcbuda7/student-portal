@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sydwellcbuda7/student_portal:0.0.1-SNAPSHOT
+    container_name: student-portal-container
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/student_portal
+      SPRING_DATASOURCE_USERNAME: student_user
+      SPRING_DATASOURCE_PASSWORD: student_pass
+    depends_on:
+      - mysql_db
+      - maildev
+    networks:
+      - student_portal_network  # Updated to use the shared network
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/auth/test"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Replace with your root password
+      MYSQL_DATABASE: student_portal     # Database name
+      MYSQL_USER: student_user           # Database user
+      MYSQL_PASSWORD: student_pass       # Database user password
+    ports:
+      - "3306:3306"
+    networks:
+      - student_portal_network  # Updated to use the shared network
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p rootpassword || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  maildev:
+    image: maildev/maildev
+    container_name: maildev-container
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+    networks:
+      - student_portal_network  # Updated to use the shared network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://127.0.0.1:1080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+
+networks:
+  student_portal_network:  # Changed to student_portal_network to allow cross-container communication
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
