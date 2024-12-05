@@ -51,6 +51,14 @@ spring:
     cache: false
     check-template-location: true
 
+# Custom path for Swagger UI
+springdoc:
+  swagger-ui:
+    path: /api-docs
+
+  api-docs:
+    path: /api/v3/api-docs
+
 #  liquibase:
 #    change-log: classpath:db/changelog/db.changelog-master.xml
 #    enabled: true

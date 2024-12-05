@@ -22,6 +22,8 @@ public class WebAppConfig implements WebMvcConfigurer {
     public void addInterceptors (InterceptorRegistry interceptorRegistry) {
         log.info("this method will get invoked by container while deployment");
         interceptorRegistry.addInterceptor(permissionsInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/swagger**", "/webjars/springfox-swagger-ui/**");
+                .excludePathPatterns("/swagger**", "/webjars/springfox-swagger-ui/**",
+                        "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**",
+                        "/favicon.ico", "/index.html");
     }
 }

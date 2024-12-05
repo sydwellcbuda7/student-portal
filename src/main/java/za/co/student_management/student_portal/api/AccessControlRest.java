@@ -9,8 +9,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import za.co.student_management.student_portal.config.security.PermissionsAllowed;
 import za.co.student_management.student_portal.control.Authentication;
 import za.co.student_management.student_portal.control.Credentials;
+import za.co.student_management.student_portal.model.datatype.Role;
 import za.co.student_management.student_portal.service.AccessControlService;
 import za.co.student_management.student_portal.transfer_object.ChangePasswordTo;
 import za.co.student_management.student_portal.transfer_object.SessionContextTo;
@@ -20,6 +22,7 @@ import java.util.Set;
 @RestController
 @RequestMapping(path = "/access-control")
 @RequiredArgsConstructor
+@PermitAll
 public class AccessControlRest {
 
     private final AccessControlService accessControlService;
@@ -78,7 +81,7 @@ public class AccessControlRest {
 
 
     @Operation(description = "Get user session context")
-    @PermitAll
+    @PermissionsAllowed(Role.STUDENT)
     @GetMapping(path = "/session-context",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Set<SessionContextTo> getUserSessionContext() {

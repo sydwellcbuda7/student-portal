@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -25,7 +26,6 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class JWTSecurityConfig {
 
     private final JWTSecurityProvider jwtSecurityProvider;
@@ -36,33 +36,32 @@ public class JWTSecurityConfig {
         this.jwtSecurityProvider = jwtSecurityProvider;
         this.jwtService = jwtService;
     }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Handle exceptions for unauthorized and forbidden access
                 .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                        })
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
-                        })
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied"))
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/webjars/**", "/favicon.ico", "/index.html").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/student").permitAll()
+                        .requestMatchers("/api/v1/access-control/**").permitAll()
+                        .requestMatchers("/api/v1/student/**").authenticated()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll()
+                )
                 .addFilterAfter(new JWTSecurityFilter(jwtService), BasicAuthenticationFilter.class);
 
         return http.build();
     }
+
 
 
 

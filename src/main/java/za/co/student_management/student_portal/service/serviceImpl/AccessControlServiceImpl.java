@@ -82,7 +82,6 @@ public class AccessControlServiceImpl implements AccessControlService {
     public void resetPassword(String email) {
         UserEntity user = userRepository.findUserEntityByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Could not find user with email " + email));
-//        passwordResetRepository.markOldPasswordRestForUserAsExpired(user.getId());
         PasswordResetEntity passwordReset = new PasswordResetEntity();
         passwordReset.setUser(user);
         passwordReset.setToken(UUID.randomUUID().toString());
@@ -133,7 +132,6 @@ public UserEntity getCurrentlyLoggedInUser() {
         model.put("link", link);
         EmailTO emailTO = new EmailTO("noreply@etalente.co.za", passwordReset.getUser().getEmail(), "Reset Password",
                 NotificationTemplateType.PASSWORD_RESET, model);
-        System.out.println("\n " + "Link " + link + "\n");
         managementService.sendEmailNotification(emailTO);
     }
 

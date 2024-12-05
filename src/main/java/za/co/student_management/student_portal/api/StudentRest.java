@@ -16,8 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import za.co.student_management.student_portal.config.security.PermissionsAllowed;
 import za.co.student_management.student_portal.model.StudentEntity;
 import za.co.student_management.student_portal.model.UserRoleEntity;
+import za.co.student_management.student_portal.model.datatype.Role;
 import za.co.student_management.student_portal.service.StudentService;
 import za.co.student_management.student_portal.service.StudentSpecification;
 
@@ -59,7 +61,7 @@ public class StudentRest {
             }
     )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PermitAll
+    @PermissionsAllowed(Role.STUDENT)
     public ResponseEntity<Page<StudentEntity>> getAllStudents(
             @RequestParam(required = false) String email,
             @RequestParam(required = false) Boolean delete,
@@ -91,6 +93,7 @@ public class StudentRest {
     )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PermitAll
+    @PermissionsAllowed(Role.STUDENT)
     public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long id) {
         StudentEntity student = studentService.getStudentById(id);
         return ResponseEntity.ok(student);
@@ -108,6 +111,7 @@ public class StudentRest {
     )
     @DeleteMapping(value = "/{id}")
     @PermitAll
+    @PermissionsAllowed(Role.STUDENT)
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();

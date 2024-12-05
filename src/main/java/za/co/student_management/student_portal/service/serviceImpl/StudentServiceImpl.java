@@ -37,9 +37,13 @@ public class StudentServiceImpl implements StudentService {
             StudentEntity existingStudent = studentRepository.findById(student.getId())
                     .orElseThrow(() -> new ResourceClosedException("Student not found"));
 
-            student.setVersion(existingStudent.getVersion());
-            existingStudent.getAssignedRoles().clear();
-            existingStudent.getAssignedRoles().addAll(student.getAssignedRoles());
+            if(!existingStudent.getEmail().equals(student.getEmail())){
+                Optional<UserEntity> user = userRepository.findUserEntityByEmail(student.getEmail());
+                if (user.isPresent()) {
+                    throw new InvalidInputException("Email already registered");
+                }
+            }
+
         }
 
         if (student.getId() == null) {
