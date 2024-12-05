@@ -56,7 +56,7 @@ spring:
 #    enabled: true
 
 student-portal:
-  host: http://localhost:8080
+  host: http://localhost:4200
   jwtSecret: ByCoZ1VLVlASquaddedKt152JBTcC41Tdh
 
 #springdoc:

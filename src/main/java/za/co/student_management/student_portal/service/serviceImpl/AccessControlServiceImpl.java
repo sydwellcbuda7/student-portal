@@ -79,9 +79,9 @@ public class AccessControlServiceImpl implements AccessControlService {
 
     @Transactional
     @Override
-    public void resetPassword(String username) {
-        UserEntity user = userRepository.findUserEntityByEmail(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Could not find user with username " + username));
+    public void resetPassword(String email) {
+        UserEntity user = userRepository.findUserEntityByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Could not find user with email " + email));
 //        passwordResetRepository.markOldPasswordRestForUserAsExpired(user.getId());
         PasswordResetEntity passwordReset = new PasswordResetEntity();
         passwordReset.setUser(user);

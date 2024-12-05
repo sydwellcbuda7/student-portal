@@ -72,8 +72,8 @@ public class AccessControlRest {
     @PostMapping(path = "/reset-password",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public void resetPassword(@RequestParam(name = "username") String username) {
-        accessControlService.resetPassword(username);
+    public void resetPassword(@RequestParam(name = "email") String email) {
+        accessControlService.resetPassword(email);
     }
 
 

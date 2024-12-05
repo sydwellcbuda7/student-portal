@@ -13,7 +13,7 @@ public interface AccessControlService {
 
     void changePassword(ChangePasswordTo changePasswordTo);
 
-    void resetPassword(String username);
+    void resetPassword(String email);
 
     Set<SessionContextTo> getUserSessionContexts();
 }

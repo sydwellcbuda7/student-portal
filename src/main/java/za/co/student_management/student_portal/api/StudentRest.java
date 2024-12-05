@@ -26,7 +26,7 @@ import java.util.Set;
 
 
 @RestController
-@RequestMapping(path = "/students")
+@RequestMapping(path = "/student")
 @RequiredArgsConstructor
 public class StudentRest {
 
