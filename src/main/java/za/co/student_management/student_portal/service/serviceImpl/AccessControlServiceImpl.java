@@ -112,16 +112,12 @@ public class AccessControlServiceImpl implements AccessControlService {
 
 
     public Long getUserIdForCurrentUser() {
-//        Object object = SecurityContextHolder
-//                .getContext();
-//        System.out.println("\n "+ object.toString()+"\n");
-//        TokenAuthentication authentication = (TokenAuthentication) SecurityContextHolder
-//                .getContext().getAuthentication();
-//        String userId = authentication.getUserId();
-//        return Long.parseLong(userId);
-        return 1L;
+        TokenAuthentication authentication =
+                (TokenAuthentication) SecurityContextHolder
+                .getContext().getAuthentication();
+        String userId = authentication.getUserId();
+        return Long.parseLong(userId);
     }
-
 public UserEntity getCurrentlyLoggedInUser() {
     return userRepository.findById(getUserIdForCurrentUser())
             .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + getUserIdForCurrentUser()));
