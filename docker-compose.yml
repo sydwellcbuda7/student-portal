@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
+  back_end:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: sydwellcbu/student_portal:0.0.1-SNAPSHOT
     container_name: student-portal-container
     ports:
@@ -24,7 +24,7 @@ services:
       - mysql_db
       - maildev
     networks:
-      - student_portal_network
+      - app-network  # Use the same network here
     logging:
       driver: json-file
       options:
@@ -47,7 +47,7 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - student_portal_network
+      - app-network  # Ensure the MySQL container also uses the same network
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -68,7 +68,7 @@ services:
       - "1080:1080"
       - "1025:1025"
     networks:
-      - student_portal_network
+      - app-network  # Ensure the MailDev container uses the same network
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "1025"]
       interval: 30s
@@ -81,7 +81,7 @@ services:
         max-file: "3"
 
 networks:
-  student_portal_network:
+  app-network:
     driver: bridge
 
 volumes:
