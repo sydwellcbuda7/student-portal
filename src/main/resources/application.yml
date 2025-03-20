@@ -2,12 +2,13 @@ server:
   port: 8080
   servlet:
     context-path: /api/v1
+# url: jdbc:mysql://localhost:3306/student_portal # Connect to the MySQL container by service name
 
 spring:
   application:
     name: Student Portal API
   datasource:
-    url: jdbc:mysql://localhost:3306/student_portal # Connect to the MySQL container by service name
+    url: jdbc:mysql://mysql-container:3306/student_portal # Connect to the MySQL container by service name
     username: student_user                                # MySQL user
     password: student_pass                                # MySQL user password
     driver-class-name: com.mysql.cj.jdbc.Driver           # MySQL JDBC driver
