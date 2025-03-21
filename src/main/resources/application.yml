@@ -65,7 +65,7 @@ springdoc:
 #    enabled: true
 
 student-portal:
-  host: ${CLIENT_HOST:localhost}:4200
+  host: "http://${CLIENT_HOST:localhost}:4200"
   jwtSecret: ByCoZ1VLVlASquaddedKt152JBTcC41Tdh
 
 #springdoc:
