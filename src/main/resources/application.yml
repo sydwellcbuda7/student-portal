@@ -26,7 +26,6 @@ spring:
       org.hibernate.SQL: DEBUG                            # Enable logging for SQL queries
       org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Log SQL parameter binding
 
-  spring:
   mail:
     host: ${MAIL_HOST:localhost}
     port: ${MAIL_PORT:1025}
