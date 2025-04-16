@@ -13,13 +13,13 @@ import lombok.Setter;
 @Table(name = "students")
 public class StudentEntity extends UserEntity{
 
-    @Column(name = "firstName")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "lastName")
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "studentNumber")
+    @Column(name = "student_number")
     private String studentNumber;
 
     @Column(name = "gender")
