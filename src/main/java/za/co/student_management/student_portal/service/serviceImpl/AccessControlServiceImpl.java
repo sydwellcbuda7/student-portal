@@ -130,7 +130,7 @@ public UserEntity getCurrentlyLoggedInUser() {
         Map<String, Object> model = new HashMap<>();
         String link = host + "/change-password?token=" + passwordReset.getToken();
         model.put("link", link);
-        EmailTO emailTO = new EmailTO("noreply@etalente.co.za", passwordReset.getUser().getEmail(), "Reset Password",
+        EmailTO emailTO = new EmailTO("noreply@student-portal.co.za", passwordReset.getUser().getEmail(), "Reset Password",
                 NotificationTemplateType.PASSWORD_RESET, model);
         managementService.sendEmailNotification(emailTO);
     }

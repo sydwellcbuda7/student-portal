@@ -82,8 +82,8 @@ public class StudentServiceImpl implements StudentService {
 
     private String generateStudentNumber() {
         String year = String.valueOf(Year.now().getValue());
-        year = year.charAt(0) + year.substring(2); // Removing the second digit
-        return year +  UUID.randomUUID().toString().replaceAll("[^0-9]", "").substring(0, 6); // Ensures uniqueness
+        year = year.charAt(0) + year.substring(2);
+        return year +  UUID.randomUUID().toString().replaceAll("[^0-9]", "").substring(0, 6);
 
     }
 }

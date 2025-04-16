@@ -20,11 +20,14 @@ services:
       SPRING_MAIL_PASSWORD: null
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: false
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
+
+      CLIENT_HOST:
+      CLIENT_PORT:
     depends_on:
       - mysql_db
       - maildev
     networks:
-      - app-network  # Use the same network here
+      - app-network
     logging:
       driver: json-file
       options:
@@ -66,7 +69,7 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - app-network  # Ensure the MySQL container also uses the same network
+      - app-network
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -87,7 +90,7 @@ services:
       - "1080:1080"
       - "1025:1025"
     networks:
-      - app-network  # Ensure the MailDev container uses the same network
+      - app-network
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "1025"]
       interval: 30s

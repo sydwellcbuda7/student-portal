@@ -42,7 +42,13 @@ public class PermissionsInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        String authToken = request.getHeader(AUTHORIZATION_HEADER);
+        String jwt = request.getHeader(AUTHORIZATION_HEADER);
+        String authToken = null;
+        if (jwt != null) {
+            authToken = jwt.startsWith("Bearer ")
+                    ? jwt.substring(7)
+                    : jwt;
+        }
 
         if (Objects.isNull(authToken)) {
             throw new ForbiddenException("User is not logged in");

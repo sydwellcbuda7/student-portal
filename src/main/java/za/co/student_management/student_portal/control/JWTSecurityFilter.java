@@ -29,9 +29,15 @@ public class JWTSecurityFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String authToken = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        String jwt = null;
 
-        if (Objects.nonNull(authToken)) {
-            Jws<Claims> claimsJws = jwtService.verifyToken(authToken);
+        if (authToken != null) {
+                jwt = authToken.startsWith("Bearer ")
+                    ? authToken.substring(7)
+                    : authToken;
+        }
+        if (Objects.nonNull(jwt)) {
+            Jws<Claims> claimsJws = jwtService.verifyToken(jwt);
             String userId = (String) claimsJws.getBody().get(JWTService.USER_ID);
             Authentication authentication = new TokenAuthentication(userId);
 

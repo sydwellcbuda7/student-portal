@@ -8,23 +8,23 @@ spring:
   application:
     name: Student Portal API
   datasource:
-    url: jdbc:mysql://mysql-container:3306/student_portal # Connect to the MySQL container by service name
-    username: student_user                                # MySQL user
-    password: student_pass                                # MySQL user password
-    driver-class-name: com.mysql.cj.jdbc.Driver           # MySQL JDBC driver
+    url: jdbc:mysql://mysql-container:3306/student_portal
+    username: student_user
+    password: student_pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
-  # Optional: Configure connection pool size (HikariCP)
+
   jpa:
     hibernate:
-      ddl-auto: update                                    # Automatically update the schema
-    show-sql: true                                        # Log SQL queries
+      ddl-auto: update
+    show-sql: true
   mysql:
     continue-on-error: true
   logging:
     level:
-      org.hibernate.SQL: DEBUG                            # Enable logging for SQL queries
-      org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Log SQL parameter binding
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
   mail:
     protocol: smtp
@@ -52,22 +52,16 @@ spring:
     cache: false
     check-template-location: true
 
-# Custom path for Swagger UI
 springdoc:
   swagger-ui:
-    path: /api-docs
-
+    path: /swagger-ui
+    config-url: /api/v1/v3/api-docs/swagger-config
+    url: /api/v1/v3/api-docs
   api-docs:
-    path: /api/v3/api-docs
-
-#  liquibase:
-#    change-log: classpath:db/changelog/db.changelog-master.xml
-#    enabled: true
+    path: /v3/api-docs
 
 student-portal:
-  host: ${CLIENT_HOST:localhost}:4200
+  host: ${CLIENT_HOST:localhost}:${CLIENT_PORT:9999}
   jwtSecret: ByCoZ1VLVlASquaddedKt152JBTcC41Tdh
 
-#springdoc:
-#  swagger-ui:
-#    path: /custom-swagger-ui
+
