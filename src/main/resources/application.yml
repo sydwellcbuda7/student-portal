@@ -76,3 +76,12 @@ student-portal:
   jwtSecret: ByCoZ1VLVlASquaddedKt152JBTcC41Tdh
 
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    prometheus:
+      enabled: true
+

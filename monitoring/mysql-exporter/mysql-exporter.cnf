@@ -1,0 +1,5 @@
+[client]
+host=mysql_db
+port=3306
+user=student_user
+password=student_pass

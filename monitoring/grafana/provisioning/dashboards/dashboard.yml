@@ -1,0 +1,39 @@
+# monitoring/grafana/provisioning/dashboards/dashboard.yml
+apiVersion: 1
+
+providers:
+  - name: 'default'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true
+    defaults:
+      time_from: "now-6h"
+      time_to: "now"
+      timezone: "browser"
+      refresh: "30s"
+
+#  - name: 'student-portal'
+#    orgId: 1
+#    folder: 'Student Portal'
+#    type: file
+#    disableDeletion: false
+#    updateIntervalSeconds: 10
+#    allowUiUpdates: true
+#    options:
+#      path: /var/lib/grafana/dashboards/student-portal
+
+#  - name: 'infrastructure'
+#    orgId: 1
+#    folder: 'Infrastructure'
+#    type: file
+#    disableDeletion: false
+#    updateIntervalSeconds: 10
+#    allowUiUpdates: true
+#    options:
+#      path: /var/lib/grafana/dashboards/app_dashboard.json
