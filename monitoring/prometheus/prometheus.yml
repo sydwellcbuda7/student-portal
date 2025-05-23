@@ -23,13 +23,24 @@ scrape_configs:
     scrape_interval: 15s
     metrics_path: '/metrics'
 
-  # Node Exporter - System metrics
   - job_name: 'node-exporter'
     static_configs:
       - targets: ['node_exporter:9100']
-    scrape_interval: 15s
-    scrape_timeout: 15s
-    metrics_path: '/metrics'
+    scrape_interval: 30s            # Default: 1m (adjust based on needs)
+    scrape_timeout: 25s             # Default: 10s (keep < scrape_interval)
+    metrics_path: '/metrics'        # Default (explicit for clarity)
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 'node_exporter:9100'  # Fixes DNS resolution in Docker
+    metric_relabel_configs:
+      - regex: '(node_filesystem_avail_bytes|node_filesystem_size_bytes)'
+        action: keep                # Only keep critical filesystem metrics
+      - regex: '^(node_network_(receive|transmit)_bytes_total|node_cpu_seconds_total)'
+        action: keep                # Keep key network/CPU metrics
 
   # MySQL Exporter - Database metrics
   - job_name: 'mysql-exporter'

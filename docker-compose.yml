@@ -120,10 +120,10 @@ services:
       resources:
         limits:
           cpus: '1'
-          memory: 1G
+          memory: 5G
         reservations:
           cpus: '0.5'
-          memory: 512M
+          memory: 1G
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 20s
@@ -280,7 +280,7 @@ services:
     restart: unless-stopped
 
   node_exporter:
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.8.2
     container_name: node_exporter
     restart: unless-stopped
     ports:
@@ -288,24 +288,30 @@ services:
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
-      - /:/rootfs:ro
+      - /:/rootfs:ro,rslave  # Added `rslave` for bind-mount propagation
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($|/)'
+      - '--path.rootfs=/rootfs'  # Required for filesystem metrics
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|run|var/lib/docker)($|/)'  # Added common exclusions
+      - '--collector.cpu'        # Explicitly enable key collectors
+      - '--collector.meminfo'
+      - '--collector.diskstats'
+      - '--no-collector.zfs'     # Disable unused collectors (adjust as needed)
+      - '--web.listen-address=:9100'
     networks:
       - app-network
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 5G
+          cpus: '0.5'            # Reduced from 1 (Node Exporter is lightweight)
+          memory: 512M           # Reduced from 50G (massive overkill)
         reservations:
-          cpus: '0.5'
-          memory: 2G
+          cpus: '0.1'
+          memory: 100M
     healthcheck:
-      test: ["CMD", "wget", "--spider", "http://localhost:9100/metrics"]
-      interval: 20s
+      test: ["CMD", "curl", "-sf", "http://localhost:9100/metrics"]  # Better than wget
+      interval: 30s
       timeout: 5s
       retries: 3
 

@@ -13,7 +13,7 @@ receivers:
     email_configs:
       - to: 'devOPs@example.com'
         from: 'alertmanager@example.com'
-        smarthost: 'localhost:1025'
+        smarthost: 'maildev-container:1025'
         require_tls: false
         headers:
           subject: '[ALERT] {{ .CommonLabels.alertname }}'
