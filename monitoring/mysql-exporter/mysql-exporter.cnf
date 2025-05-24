@@ -1,5 +1,20 @@
+[mysqld]
+performance_schema=ON
+performance_schema_consumer_events_statements_current=ON
+performance_schema_consumer_global_instrumentation=ON
+performance_schema_consumer_statements_digest=ON  # For query analytics
+
+innodb_monitor_enable=all
+innodb_status_output=ON
+innodb_status_output_locks=ON
+
+slow_query_log=1
+slow_query_log_file=/var/log/mysql/mysql-slow.log
+long_query_time=2
+log_queries_not_using_indexes=1
+
 [client]
-host=mysql_db
-port=3306
 user=student_user
 password=student_pass
+host=mysql-db  # Must match your MySQL service name
+port=3306

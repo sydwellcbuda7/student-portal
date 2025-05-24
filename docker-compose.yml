@@ -23,8 +23,8 @@ services:
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: false
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
 
-      CLIENT_HOST: student-portal-ui
-      CLIENT_PORT: 4200
+      CLIENT_HOST: null
+      CLIENT_PORT: null
     depends_on:
       - mysql-db
       - maildev
@@ -140,11 +140,25 @@ services:
     image: prom/mysqld-exporter:latest
     container_name: mysql-exporter
     restart: unless-stopped
+    environment:
+      DATA_SOURCE_NAME: "student_user:student_pass@(mysql-db:3306)/student_portal"
     ports:
       - "9104:9104"
     volumes:
       - ./monitoring/mysql-exporter/mysql-exporter.cnf:/etc/mysql/mysql-exporter.cnf
-    command: --config.my-cnf=/etc/mysql/mysql-exporter.cnf
+    command:
+      - "--config.my-cnf=/etc/mysql/mysql-exporter.cnf"
+      - "--collect.global_status"
+      - "--collect.global_variables"
+      - "--collect.info_schema.innodb_metrics"
+      - "--collect.info_schema.processlist"
+      - "--collect.info_schema.query_response_time"
+      - "--collect.info_schema.tables"
+      - "--collect.info_schema.tablestats"
+      - "--collect.slave_status"
+      - "--collect.perf_schema.eventsstatements"
+      - "--collect.perf_schema.eventswaits"
+      - "--collect.perf_schema.file_events"
     networks:
       - app-network
     deploy:
@@ -294,12 +308,12 @@ services:
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
-      - '--path.rootfs=/rootfs'  # Required for filesystem metrics
+      - '--path.rootfs=/rootfs'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|run|var/lib/docker)($|/)'  # Added common exclusions
-      - '--collector.cpu'        # Explicitly enable key collectors
+      - '--collector.cpu'
       - '--collector.meminfo'
       - '--collector.diskstats'
-      - '--no-collector.zfs'     # Disable unused collectors (adjust as needed)
+      - '--no-collector.zfs'
       - '--web.listen-address=:9100'
     networks:
       - app-network

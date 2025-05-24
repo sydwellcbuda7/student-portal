@@ -69,6 +69,12 @@ student-portal:
   jwtSecret: ByCoZ1VLVlASquaddedKt152JBTcC41Tdh
 
 management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
   endpoints:
     web:
       exposure:
