@@ -26,10 +26,7 @@ public abstract class UserEntity extends BaseAuditEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_user_id")
-    @Size()
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserRoleEntity> assignedRoles = new HashSet<>();
 
 }

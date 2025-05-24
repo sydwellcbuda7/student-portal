@@ -66,7 +66,7 @@ scrape_configs:
   # Spring Boot Application - Backend metrics
   - job_name: 'student-portal-backend'
     static_configs:
-      - targets: ['student-portal-container:8083']
+      - targets: ['student-portal:8083']
     scrape_interval: 15s
     metrics_path: '/api/v1/actuator/prometheus'
 
@@ -89,8 +89,8 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:
-          - http://student-portal-container:8083/api/v1/actuator/health
-          - http://student-portal-ui-container:4200
+          - http://student-portal:8083/api/v1/actuator/health
+          - http://student-portal-ui:4200
           - http://maildev:1080
     relabel_configs:
       - source_labels: [__address__]

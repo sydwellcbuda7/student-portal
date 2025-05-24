@@ -30,37 +30,38 @@ public class StudentServiceImpl implements StudentService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-
     @Override
     public StudentEntity registerOrUpdateStudent(StudentEntity student) {
-        if (student.getId() != null) {
-            StudentEntity existingStudent = studentRepository.findById(student.getId())
-                    .orElseThrow(() -> new ResourceClosedException("Student not found"));
+        if (student == null) {
+            throw new IllegalArgumentException("Student entity cannot be null");
+        }
 
-            if(!existingStudent.getEmail().equals(student.getEmail())){
-                Optional<UserEntity> user = userRepository.findUserEntityByEmail(student.getEmail());
-                if (user.isPresent()) {
-                    throw new InvalidInputException("Email already registered");
-                }
-            }
-
+        Optional<UserEntity> existingUser = userRepository.findUserEntityByEmail(student.getEmail());
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(student.getId())) {
+            throw new InvalidInputException("Email already registered");
         }
 
         if (student.getId() == null) {
-            Optional<UserEntity> user = userRepository.findUserEntityByEmail(student.getEmail());
-            if (user.isPresent()) {
-                throw new InvalidInputException("Email already registered");
-            }
             student.getAssignedRoles().clear();
-            student.getAssignedRoles().add(new UserRoleEntity(Role.STUDENT));
+            UserRoleEntity studentRole = new UserRoleEntity(Role.STUDENT);
+            studentRole.setUser(student);
+            student.getAssignedRoles().add(studentRole);
             student.setStudentNumber(generateStudentNumber());
             student.setPassword(passwordEncoder.encode(student.getPassword()));
-
+        } else {
+            StudentEntity existingStudent = studentRepository.findById(student.getId())
+                    .orElseThrow(() -> new ResourceClosedException("Student not found"));
+            existingStudent.setFirstName(student.getFirstName());
+            existingStudent.setLastName(student.getLastName());
+            existingStudent.setGender(student.getGender());
+            if (student.getPassword() != null && !student.getPassword().isEmpty()) {
+                existingStudent.setPassword(passwordEncoder.encode(student.getPassword()));
+            }
+            student = existingStudent;
         }
 
         return studentRepository.save(student);
     }
-
 
     @Override
     public Page<StudentEntity> getAllStudents(StudentSpecification specification, Pageable pageable) {

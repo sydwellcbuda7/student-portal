@@ -128,7 +128,7 @@ public UserEntity getCurrentlyLoggedInUser() {
     }
     public void setPasswordResetEmail(PasswordResetEntity passwordReset) {
         Map<String, Object> model = new HashMap<>();
-        String link = host + "/change-password?token=" + passwordReset.getToken();
+        String link = "http://" + host + "/change-password?token=" + passwordReset.getToken();
         model.put("link", link);
         EmailTO emailTO = new EmailTO("noreply@student-portal.co.za", passwordReset.getUser().getEmail(), "Reset Password",
                 NotificationTemplateType.PASSWORD_RESET, model);

@@ -15,10 +15,10 @@ clients:
       max_period: 5s
       max_retries: 10
     external_labels:
-      host: "$(HOSTNAME)"
+      host: "$(HOSTNAME:localhost)"
       environment: production
       cluster: "production-cluster"
-    batchwait: 1s
+    batchwait: 30s
     batchsize: 102400
     timeout: 30s
 
