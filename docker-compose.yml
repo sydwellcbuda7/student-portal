@@ -1,6 +1,3 @@
-
-version: '3.8'
-
 services:
   student-portal:
     build:
@@ -15,14 +12,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/student_portal
       SPRING_DATASOURCE_USERNAME: student_user
       SPRING_DATASOURCE_PASSWORD: student_pass
-
       SPRING_MAIL_HOST: maildev
       SPRING_MAIL_PORT: 1025
       SPRING_MAIL_USERNAME: null
       SPRING_MAIL_PASSWORD: null
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: false
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
-
       CLIENT_HOST: null
       CLIENT_PORT: null
     depends_on:
@@ -80,6 +75,8 @@ services:
     image: nginx/nginx-prometheus-exporter:latest
     container_name: nginx-exporter
     restart: unless-stopped
+    ports:
+      - "9114:9114"
     command:
       - "--nginx.scrape-uri=http://student-portal-ui:9113/nginx_status"
       - "--web.listen-address=:9114"
@@ -227,7 +224,7 @@ services:
           cpus: '0.5'
           memory: 1G
     depends_on:
-      - node_exporter
+      - node-exporter
       - alertmanager
       - victoriametrics
     healthcheck:
@@ -263,7 +260,7 @@ services:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000/api/health" ]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 20s
       timeout: 5s
       retries: 3
@@ -295,21 +292,21 @@ services:
       - loki
     restart: unless-stopped
 
-  node_exporter:
+  node-exporter:
     image: prom/node-exporter:v1.8.2
-    container_name: node_exporter
+    container_name: node-exporter
     restart: unless-stopped
     ports:
       - "9100:9100"
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
-      - /:/rootfs:ro,rslave  # Added `rslave` for bind-mount propagation
+      - /:/rootfs:ro,rslave
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--path.rootfs=/rootfs'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|run|var/lib/docker)($|/)'  # Added common exclusions
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|run|var/lib/docker)($|/)'
       - '--collector.cpu'
       - '--collector.meminfo'
       - '--collector.diskstats'
@@ -320,13 +317,13 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'            # Reduced from 1 (Node Exporter is lightweight)
-          memory: 512M           # Reduced from 50G (massive overkill)
+          cpus: '0.5'
+          memory: 512M
         reservations:
           cpus: '0.1'
           memory: 100M
     healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:9100/metrics"]  # Better than wget
+      test: ["CMD", "curl", "-sf", "http://localhost:9100/metrics"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -354,7 +351,7 @@ services:
           cpus: '0.5'
           memory: 512M
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3100/ready" ]
+      test: ["CMD", "curl", "-f", "http://localhost:3100/ready"]
       interval: 20s
       timeout: 5s
       retries: 3
@@ -409,7 +406,6 @@ services:
       timeout: 5s
       retries: 3
 
-
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
     container_name: cadvisor
@@ -462,7 +458,6 @@ services:
       timeout: 5s
       retries: 3
 
-
 networks:
   app-network:
     driver: bridge
@@ -478,7 +473,6 @@ networks:
     internal: false
     attachable: true
 
-
 volumes:
   mysql_data:
     driver: local
@@ -488,5 +482,3 @@ volumes:
     driver: local
   loki_data:
     driver: local
-
-#docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -q) | sed 's#^/##'
