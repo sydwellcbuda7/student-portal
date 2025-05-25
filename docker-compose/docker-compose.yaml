@@ -3,7 +3,7 @@ version: '3.8'
 services:
   student-portal:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile
     image: sydwellcbu/student_portal:0.0.1-SNAPSHOT
     container_name: student-portal
