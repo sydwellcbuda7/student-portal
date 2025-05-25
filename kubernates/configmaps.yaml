@@ -12,7 +12,7 @@ data:
   SPRING_MAIL_PASSWORD: ""
   SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
   SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
-  CLIENT_HOST: "student-portal"
+  CLIENT_HOST: "local.student-portal.com"
   CLIENT_PORT: "4200"
 
 ---

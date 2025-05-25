@@ -21,7 +21,6 @@ services:
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
       CLIENT_HOST: ""
-      CLIENT_PORT: ""
     depends_on:
       - mysql-db
       - maildev

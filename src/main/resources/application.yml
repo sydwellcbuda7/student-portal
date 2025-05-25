@@ -65,7 +65,7 @@ springdoc:
     path: /v3/api-docs
 
 student-portal:
-  host: ${CLIENT_HOST:localhost}:${CLIENT_PORT:4200}
+  host: "${CLIENT_HOST:localhost:4200}"
   jwtSecret: ByCoZ1VLVlASquaddedKt152JBTcC41Tdh
 
 management:
