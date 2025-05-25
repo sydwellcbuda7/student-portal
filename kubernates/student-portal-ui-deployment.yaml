@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: student-portal-ui
+  name: student-portal-ui
+  namespace: student-portal-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: student-portal-ui
+  template:
+    metadata:
+      labels:
+        app: student-portal-ui
+    spec:
+      containers:
+        - image: sydwellcbu/student_portal_ui:0.0.1-SNAPSHOT
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://student-portal-ui:4200
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 5
+          name: student-portal-ui
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4200
+              protocol: TCP
+            - containerPort: 9113
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: "536870912"
+            requests:
+              cpu: 250m
+              memory: "268435456"
+      restartPolicy: Always

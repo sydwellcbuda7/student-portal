@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: student-portal-config
+  namespace: student-portal-ns
+data:
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-db:3306/student_portal"
+  SPRING_DATASOURCE_USERNAME: "student_user"
+  SPRING_MAIL_HOST: "maildev"
+  SPRING_MAIL_PORT: "1025"
+  SPRING_MAIL_USERNAME: ""
+  SPRING_MAIL_PASSWORD: ""
+  SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
+  SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
+  CLIENT_HOST: "student-portal"
+  CLIENT_PORT: "4200"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: student-portal-ns
+data:
+  MYSQL_DATABASE: "student_portal"
+  MYSQL_USER: "student_user"

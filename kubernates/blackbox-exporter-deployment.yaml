@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: blackbox-exporter
+  name: blackbox-exporter
+  namespace: student-portal-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blackbox-exporter
+  template:
+    metadata:
+      labels:
+        app: blackbox-exporter
+    spec:
+      containers:
+        - image: prom/blackbox-exporter
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - --spider
+                - http://blackbox-exporter:9115
+            failureThreshold: 3
+            periodSeconds: 20
+            timeoutSeconds: 5
+          name: blackbox-exporter
+          ports:
+            - containerPort: 9115
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: "536870912"
+            requests:
+              cpu: 200m
+              memory: "268435456"
+      restartPolicy: Always

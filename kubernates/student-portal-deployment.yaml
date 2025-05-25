@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: student-portal
+  name: student-portal
+  namespace: student-portal-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: student-portal
+  template:
+    metadata:
+      labels:
+        app: student-portal
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: student-portal-config
+          env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: user-password
+          image: sydwellcbu/student_portal:0.0.1-SNAPSHOT
+          livenessProbe:
+            exec:
+              command:
+                - curl -f http://student-portal:8083/api/v1/actuator/health
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+          name: student-portal
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1073741824"
+            requests:
+              cpu: 500m
+              memory: "536870912"
+      restartPolicy: Always

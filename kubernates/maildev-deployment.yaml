@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: maildev
+  name: maildev
+  namespace: student-portal-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maildev
+  template:
+    metadata:
+      labels:
+        app: maildev
+    spec:
+      containers:
+        - image: maildev/maildev
+          livenessProbe:
+            exec:
+              command:
+                - nc
+                - -z
+                - maildev
+                - "1025"
+            failureThreshold: 3
+            periodSeconds: 20
+            timeoutSeconds: 5
+          name: maildev
+          ports:
+            - containerPort: 1080
+              protocol: TCP
+            - containerPort: 1025
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 300m
+              memory: "268435456"
+            requests:
+              cpu: 100m
+              memory: "134217728"
+      restartPolicy: Always
